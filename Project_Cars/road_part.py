@@ -3,8 +3,10 @@ from pygame.locals import *
 from Util.loads import load_image
 
 class Road:
+    image = None
     def __init__(self, coords):
-        self.image = load_image("pdn_road_example.png", alpha_cannel=True, path='../Images/road parts' )
+        if not self.image:
+            self.image = load_image("pdn_road_example.png", alpha_cannel=True, path='../Images/road parts' )
         self.pos = coords
         self.rect = self.image.get_rect()
         self.rect.topleft = self.pos
@@ -13,7 +15,8 @@ class Road:
         self.rect.y +=speed
 
     def render(self,screen):
-        screen.blit(self.image, self.rect)
+        if self.rect.y>=-1000 or self.rect.y<=1000:
+            screen.blit(self.image, self.rect)
 
     def get_static_rect(self):
         self.staticrect = pygame.Rect((0,0), (self.rect.x, self.rect.h*5))
