@@ -4,25 +4,42 @@ from Util.loads import load_image
 
 
 class Road:
+    image = None
+    image2 = None
+    image_jungle = None
     def __init__(self, coords):
-        self.image = load_image("pdn_road_example.png", alpha_cannel=True, path='../Images/road parts')
+        if not self.image:
+            Road.image = load_image("pdn_road_example.png", alpha_cannel=True, path='../Images/road parts')
+        if not self.image2:
+            Road.image2 = load_image("pdn_road_example.png", alpha_cannel=True, path='../Images/road parts')
+            Road.image2 = pygame.transform.rotate(Road.image2, 180)
+        if not self.image_jungle:
+            Road.image_jungle = load_image('jungle.png', path='../Images')
         self.pos = coords
         self.rect = self.image.get_rect()
-        # print("Ширина картинки = ", self.rect.w)
-        # print("высота картинки = ", self.rect.h)
+        self.rect2 = self.image2.get_rect()
         self.rect.topleft = self.pos
+        self.rect2.topleft = self.rect.topright
+        self.jungle_rect = self.image_jungle.get_rect()
+        self.jungle_rect2 = self.image_jungle.get_rect()
+        self.jungle_rect.topleft = ((0, 0))
+        self.jungle_rect2.topleft =((self.rect2.right, 0))
+
+
 
     def update(self, speed):
         self.rect.y += speed
+        self.rect2.y += speed
+        self.jungle_rect.y += speed
+        self.jungle_rect2.y += speed
 
     def render(self, screen):
-        screen.blit(self.image, self.rect)
+        if -500 <= self.rect.y <= 1000:
+            screen.blit(self.image, self.rect)
+            screen.blit(self.image2, self.rect2)
+        screen.blit(self.image_jungle, self.jungle_rect)
+        screen.blit(self.image_jungle, self.jungle_rect2)
 
-    def get_static_rect(self):
-        return pygame.Rect((0, 0), (self.rect.x, self.rect.h * 5))
-
-    def get_static_rect2(self):
-        return pygame.Rect((self.rect.x + self.rect.w, 0), (self.rect.x, self.rect.h * 5))
 
 
 if __name__ == '__main__':

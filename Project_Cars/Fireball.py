@@ -7,8 +7,10 @@ from Classes.Vector import Vector
 from Util.loads import load_image
 
 class Fireball():
+    image = None
     def __init__(self,pos, angle_of_rotate):
-        self.image = load_image("Flying_fireball.png", alpha_cannel=True,  path='../Images')
+        if not self.image:
+            Fireball.image = load_image("Flying_fireball.png", alpha_cannel=True,  path='../Images')
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
         self.rect_img = self.rect

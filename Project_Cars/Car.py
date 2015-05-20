@@ -40,6 +40,7 @@ class Car:
         self.max_speed = Vector((181, 0))
         self.change_move_func = False
         self.angle_of_rotate = 0
+        self.points = 0
 
 
     def friction(self):
@@ -47,11 +48,18 @@ class Car:
 
     def text_render(self, screen):
         a = str(int(self.speed.len()))
+        b = str(self.points)
+        b = 'Очки:' + b
         font = pygame.font.Font(None, 30)
+        font2 = pygame.font.Font(None, 40)
         text = font.render(a, True, (255,255,255),None)
+        text2 = font2.render(b, True, (255,255,255), None)
         textRect = text.get_rect()
+        textRect2 = text2.get_rect()
         textRect.topleft = (67,180)
+        textRect2.topleft = (50, 600)
         screen.blit(text, textRect)
+        screen.blit(text2, textRect2)
 
     def event(self, event):
         """
@@ -245,7 +253,7 @@ if __name__ == '__main__':
 
         for barrel in testBarrel.barrels:
             if barrel.rect.colliderect(testCar.rect_img):
-                testCar.speed = testCar.speed*0.5
+                testCar.speed = testCar.speed*0.3
                 testBarrel.remove_barrel(barrel)
         """
         Проверяет выход машины за дорогу

@@ -3,27 +3,26 @@ from pygame.locals import *
 
 from Util.loads import load_image
 
-BORDER_1 = -500
-BORDER_2 = 1000
-class Barrel:
+
+class FireBarrel:
     image = None
 
     def __init__(self, coords):
         if not self.image:
-            Barrel.image = load_image("images.png", alpha_cannel=True, path='../Images')
+            FireBarrel.image = load_image("fire_box.png", alpha_cannel=True, path='../Images')
         self.image = pygame.transform.scale(self.image, (50,50))
         self.pos = coords
         self.rect = self.image.get_rect()
         self.rect.topleft = self.pos
-        self.equal = 2
+        self.equal = True
 
     def update(self, speed=0):
         self.rect.y += speed
 
     def test_equal(self, other):
-        if self.equal:
+        if self.equal == True:
             if self.rect.y>=other:
-                self.equal += -1
+                self.equal = False
                 return 1
             else:
                 return 0
@@ -35,7 +34,7 @@ class Barrel:
 
         :type self: object
         """
-        if BORDER_1 <= self.rect.y <= BORDER_2:
+        if -500 <= self.rect.y <= 1000:
             screen.blit(self.image, self.rect)
 
 

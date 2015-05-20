@@ -1,2 +1,5 @@
-a = "Я твою мамку ебал"
-print(type(a))
+while True:
+    input('Нажмите Enter')
+
+
+

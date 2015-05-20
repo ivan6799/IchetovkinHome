@@ -2,14 +2,17 @@ import pygame, sys, random, os
 from pygame.locals import *
 from Util.loads import load_image
 from Project_Cars import  Barrier
+from Project_Cars import Fire_barrel
 
 #Показывает через сколько пикселей создается новая партия ящиков
-LEN_BARREL_SPAWN = 100
+LEN_BARREL_SPAWN = 297
 
 
 class Barrel_Control:
-    def __init__(self, road_x=200, road_w=299*2, window_h=700, bil=7):
+    def __init__(self, road_x=200, road_w=299*2, window_h=700, bil=5000):
         self.barrels = []
+        self.barrels_main = []
+        self.fire_bareels = []
         self.x_start = road_x
         self.x_end = road_x+road_w
         # self.remove_pos = window_h
@@ -21,9 +24,21 @@ class Barrel_Control:
         barrel_field = self.x_start + (self.x_end-self.x_start)/(self.random_coordinate+1)*random.randint(0,self.random_coordinate)
         barrel_field2 = self.x_start + (self.x_end-self.x_start)/(self.random_coordinate+1)*random.randint(0,self.random_coordinate)
         barrel_field3 = self.x_start + (self.x_end-self.x_start)/(self.random_coordinate+1)*random.randint(0,self.random_coordinate)
+        barrel_field4 = self.x_start + (self.x_end-self.x_start)/(self.random_coordinate+1)*random.randint(0,self.random_coordinate)
+        if barrel_field>self.x_end-55:
+            barrel_field = self.x_end-50
+        if barrel_field2>self.x_end-55:
+            barrel_field2 = self.x_end-50
+        if barrel_field3>self.x_end-55:
+            barrel_field3 = self.x_end-50
+        if barrel_field4> self.x_end-55:
+            barrel_field4 = self.x_end-50
         barrel = Barrier.Barrel((barrel_field, -150))
         barrel2 = Barrier.Barrel((barrel_field2, -100))
         barrel3 = Barrier.Barrel((barrel_field3, -50))
+        fire_barrel = Fire_barrel.FireBarrel((barrel_field4, -200))
+
+        self.fire_bareels.append(fire_barrel)
         self.barrels.append(barrel)
         self.barrels.append(barrel2)
         self.barrels.append(barrel3)
@@ -31,6 +46,9 @@ class Barrel_Control:
 
     def remove_barrel(self, barrel):
         self.barrels.remove(barrel)
+
+    def remove_fire_barrel(self, fire_barrel):
+        self.fire_bareels.remove(fire_barrel)
 
     def update(self, speed, other):
         if not self.barrels:
@@ -41,6 +59,8 @@ class Barrel_Control:
             i.update(speed)
         for i in self.barrels:
             self.barrel_score+= i.test_equal(other)
+        for i in self.fire_bareels:
+            i.update(speed)
 
 
     def text_render(self, screen):
@@ -70,6 +90,8 @@ class Barrel_Control:
 
     def render(self,screen):
         for i in self.barrels:
+            i.render(screen)
+        for i in self.fire_bareels:
             i.render(screen)
         self.text_render(screen)
         self.text_render2(screen)

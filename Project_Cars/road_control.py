@@ -2,6 +2,7 @@ import pygame, sys, random, os
 from pygame.locals import *
 from Util.loads import load_image
 from Project_Cars.road_part import  Road
+from Project_Cars.jungle import Jungle
 
 
 OPTIMAL_LEN = 297
@@ -11,6 +12,7 @@ OPTIMAL_LEN = 297
 class Road_Control:
     def __init__(self, road_x=200, road_w=299, road_h = 297):
         self.roads = []
+        self.jungles = []
         self.x1 = road_x
         self.w = road_w
         self.x2 = road_x+road_w
@@ -24,21 +26,11 @@ class Road_Control:
             c = Road((self.x1, b.rect.y + self.h))
             d= Road((self.x1, c.rect.y + self.h))
             e = Road((self.x1, self.h*-2))
-            a2 = Road((self.x2, self.h*-1))
-            b2 = Road((self.x2, a2.rect.y + self.h))
-            c2 = Road((self.x2, b2.rect.y + self.h))
-            d2 = Road((self.x2, c2.rect.y + self.h))
-            e2 = Road((self.x2, self.h*-2))
             self.roads.append(e)
             self.roads.append(a)
             self.roads.append(b)
             self.roads.append(c)
             self.roads.append(d)
-            self.roads.append(e2)
-            self.roads.append(a2)
-            self.roads.append(b2)
-            self.roads.append(c2)
-            self.roads.append(d2)
 
         else:
             if self.roads[len(self.roads)-1].rect.y + self.h>=self.h*4:
@@ -47,28 +39,34 @@ class Road_Control:
                 c = Road((self.x1, b.rect.y + self.h))
                 d= Road((self.x1, c.rect.y + self.h))
                 e = Road((self.x1, self.h*-2))
-                a2 = Road((self.x2, self.h*-1))
-                b2 = Road((self.x2, a2.rect.y + self.h))
-                c2 = Road((self.x2, b2.rect.y + self.h))
-                d2 = Road((self.x2, c2.rect.y + self.h))
-                e2 = Road((self.x2, self.h*-2))
                 self.roads.append(e)
                 self.roads.append(a)
                 self.roads.append(b)
                 self.roads.append(c)
                 self.roads.append(d)
-                self.roads.append(e2)
-                self.roads.append(a2)
-                self.roads.append(b2)
-                self.roads.append(c2)
-                self.roads.append(d2)
+
+    def add_jungle(self):
+        if not self.jungles:
+            a = Jungle((self.x2+self.w, 0))
+            b = Jungle((self.x2+self.w, -1000))
+            self.jungles.append(a)
+            self.jungles.append(b)
+        else:
+            if self.jungles[len(self.jungles)-1].rect.y >=0:
+                a = Jungle((self.x2+self.w, 0))
+                b = Jungle((self.x2+self.w, -1000))
+                self.jungles.append(a)
+                self.jungles.append(b)
 
 
 
 
     def update(self, speed):
         self.add_road()
+        self.add_jungle()
         for i in self.roads:
+            i.update(speed)
+        for i in self.jungles:
             i.update(speed)
 
     def get_static_rect(self):
@@ -84,7 +82,8 @@ class Road_Control:
     def render(self,screen):
         for i in self.roads:
             i.render(screen)
-
+        for i in self.jungles:
+            i.render(screen)
 
 if __name__=='__main__':
 
